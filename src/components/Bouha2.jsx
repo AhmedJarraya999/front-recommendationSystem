@@ -8,7 +8,8 @@ import { SectionWrapper } from '../hoc';
 import { slideIn } from '../utils/motion';
 import axios from 'axios';
 
-const Contact = () => {
+const Bouha2 = () => {
+  const [selectedOption, setSelectedOption] = useState('');
   const formRef = useRef();
 
   const [showResult, setShowResult] = useState(false);
@@ -16,11 +17,12 @@ const Contact = () => {
     // name: "",
     // email: "",
     // message: "",
-    skills: '',
+    option: '',
   });
 
   const [loading, setLoading] = useState(false);
   const [resultJobTitle, setResultJobTitle] = useState('');
+  const [msginput, setMsginput] = useState('');
   const [resultMissingSkills, setResultMissingSkills] = useState([]);
 
   const handleChange = (e) => {
@@ -32,14 +34,29 @@ const Contact = () => {
       [name]: value,
     });
   };
+  const handleChange2 = (e) => {
+    setMsginput(e.target.value);
+  };
+  const handleOptionChange = (e) => {
+    setSelectedOption(e.target.value);
+  };
 
   const postData = async () => {
+    const formData = new URLSearchParams();
+    formData.append('option', form.option);
+
     setLoading(true);
     let result;
     try {
-      result = await axios.post('http://127.0.0.1:8000/users/studyplan/', {
-        skills: form.skills,
-      });
+      result = await axios.post(
+        'http://127.0.0.1:8000/users/bouha2/',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        }
+      );
     } catch (error) {
       alert('Catch Api error');
       return;
@@ -50,8 +67,9 @@ const Contact = () => {
       return;
     }
     const job_title = result?.data?.job_title;
-    const missing_skills = result?.data?.missing_skills;
-    setResultJobTitle(job_title);
+    const missing_skills = result?.data?.recommended_skills;
+    //const [selectedOption, setSelectedOption] = useState('');
+    // setResultJobTitle(job_title);
     setResultMissingSkills(missing_skills);
     setShowResult(true);
     console.log('result', result);
@@ -73,8 +91,10 @@ const Contact = () => {
             variants={slideIn('left', 'tween', 0.2, 1)}
             className="flex-[0.75] bg-black-100 p-8 rounded-2xl"
           >
-            <p className={styles.sectionSubText}>Need some</p>
-            <h3 className={styles.sectionHeadText}>Guidance.</h3>
+            <p className={styles.sectionSubText}>
+              Need Recommendation for your
+            </p>
+            <h3 className={styles.sectionHeadText}>Studyplan</h3>
 
             <form
               ref={formRef}
@@ -84,17 +104,33 @@ const Contact = () => {
               <label className="flex flex-col">
                 <span className="text-white font-medium mb-4">
                   {' '}
-                  Enter Your skills separeted by comma(,)
+                  Enter your message:
                 </span>
                 <input
                   type="text"
-                  name="skills"
-                  value={form.skills}
-                  onChange={handleChange}
-                  placeholder="Tell me about your skills"
+                  value={msginput}
+                  onChange={handleChange2}
+                  placeholder="Tell me any message"
                   className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
                 />
               </label>
+              <label htmlFor="option">Please Select your option:</label>
+              <select
+                className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
+                name="option"
+                id="option"
+                value={selectedOption}
+                onChange={handleOptionChange}
+                //onChange={handleOptionChange}
+              >
+                <option value="">-- Please select your option --</option>
+                <option value="DS">DS</option>
+                <option value="ARCTIC">ARCTIC</option>
+                <option value="INFINI">INFINI</option>
+                <option value="SIM">SIM</option>
+                <option value="SAE">SAE</option>
+                <option value="TWIN">TWIN</option>
+              </select>
 
               <button
                 type="submit"
@@ -115,10 +151,12 @@ const Contact = () => {
 
       {showResult === true && (
         <>
-          <p className={styles.sectionSubText}>You seem to be a </p>
-          <h2 className={styles.sectionHeadText}>{resultJobTitle}</h2>
           <p className={styles.sectionSubText}>
-            But you need to work more on those skills{' '}
+            Hey, Thank you for your interest
+          </p>
+          <h2 className={styles.sectionHeadText}>interest</h2>
+          <p className={styles.sectionSubText}>
+            We recommned you these modules to add in your studyplan
           </p>
           <br />
           <ul className="flex gap-4">
@@ -135,4 +173,4 @@ const Contact = () => {
   );
 };
 
-export default SectionWrapper(Contact, 'contact');
+export default SectionWrapper(Bouha2, 'Bouha2');

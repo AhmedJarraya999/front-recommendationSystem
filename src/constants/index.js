@@ -30,14 +30,22 @@ export const navLinks = [
     id: "about",
     title: "About",
   },
+  // {
+  //   id: "work",
+  //   title: "Work",
+  // },
+  //{
+    //id: "contact",
+    //title: "Predict",
+  //},
   {
-    id: "work",
-    title: "Work",
+    id: "bouha2",
+    title: "Study plan recommendation",
   },
   {
     id: "contact",
-    title: "Contact",
-  },
+    title: "Personalised recommendation",
+  }
 ];
 
 const services = [
